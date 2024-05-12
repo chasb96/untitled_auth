@@ -8,8 +8,7 @@ default = ["host"]
 host = [
     "dep:tokio", 
     "dep:tower", 
-    "dep:tower-layer", 
-    "dep:axum", 
+    "dep:tower-layer",
     "dep:axum-extra", 
     "dep:bytes", 
     "dep:log", 
@@ -31,7 +30,7 @@ client = ["dep:reqwest"]
 tokio = { version = "1.36.0", features = ["full"], optional = true }
 tower = { version = "0.4.13", optional = true }
 tower-layer = { version = "0.3.2", optional = true }
-axum = { version = "0.7.4", features = ["multipart"], optional = true }
+axum = { version = "0.7.4", features = ["multipart"] }
 axum-extra = { version = "0.9.3", features = ["protobuf"], optional = true }
 bytes = { version = "1.6.0", optional = true }
 log = { version = "0.4.20", optional = true }
