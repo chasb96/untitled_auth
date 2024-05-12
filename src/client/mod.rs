@@ -4,7 +4,7 @@ mod response;
 
 pub mod axum;
 
-use std::env;
+use std::{env, sync::OnceLock};
 
 use prost::Message;
 pub use request::VerifyTokenRequest;
@@ -12,6 +12,8 @@ pub use response::VerifyTokenResponse;
 pub use error::Error;
 
 use reqwest::{header::CONTENT_TYPE, Client};
+
+static AUTH_CLIENT: OnceLock<AuthClient> = OnceLock::new();
 
 pub struct AuthClient {
     http_client: Client,

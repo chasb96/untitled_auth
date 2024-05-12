@@ -1,9 +1,7 @@
-use std::{ops::Deref, sync::OnceLock};
+use std::ops::Deref;
 use axum::{async_trait, extract::FromRequestParts, http::{request::Parts, StatusCode}};
 
-use crate::client::AuthClient as ClientInner;
-
-static AUTH_CLIENT: OnceLock<ClientInner> = OnceLock::new();
+use crate::client::{AuthClient as ClientInner, AUTH_CLIENT};
 
 pub struct AuthClient(pub &'static ClientInner);
 
