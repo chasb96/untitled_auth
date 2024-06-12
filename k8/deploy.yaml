@@ -24,7 +24,7 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: AUTH_DATABASE_URL
+        - name: USERS_DATABASE_URL
           valueFrom: 
             secretKeyRef:
               name: users-database-connection-string

@@ -2,7 +2,6 @@ use axum::layers::LogLayer;
 use ::axum::{routing::get, Router};
 use routes::AuthRouter;
 
-mod util;
 mod jwt;
 mod axum;
 mod hash;

@@ -1,39 +1,45 @@
 use axum::{http::StatusCode, Json};
-use log::error;
+use json_or_protobuf::JsonOrProtobuf;
+use or_status_code::{OrInternalServerError, OrStatusCode};
+use users::client::axum::extractors::UsersClient;
+use users::client::{self, CreateUserRequest};
 
 use crate::host::axum::extractors::user_repository::UserRepositoryExtractor;
 use crate::host::hash::scrypt::{generate_password_hash, verify_password};
-use crate::host::repository::users::error::SignUpError;
 use crate::host::repository::users::UserRepository;
-use crate::host::axum::JsonOrProtobuf;
 use crate::host::jwt::{generate_jwt, verify_jwt, ClaimsUser};
-use crate::host::util::or_status_code::{OrInternalServerError, OrStatusCode};
 
 use super::request::{AuthenticateRequest, LoginRequest, SignUpRequest};
 use super::response::{AuthenticateResponse, LoginResponse, SignUpResponse};
 
 pub async fn sign_up(
+    users_client: UsersClient,
     user_repository: UserRepositoryExtractor,
     Json(request): Json<SignUpRequest>
 ) -> Result<Json<SignUpResponse>, StatusCode> {
+    let create_user_response = users_client
+        .create_user(CreateUserRequest { 
+            username: request.username 
+        })
+        .await;
+
+    let create_user_response = match create_user_response {
+        Ok(create_user_response) => create_user_response,
+        Err(client::Error::Status(status_code)) => return Err(status_code),
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
+    };
+
     let password_hash = generate_password_hash(&request.password)
         .or_internal_server_error()?;
 
-    let id = user_repository
-        .create_user(&request.username, &password_hash)
+    user_repository
+        .set_password(create_user_response.id, &password_hash)
         .await
-        .map_err(|err| match err {
-            SignUpError::UsernameTaken => StatusCode::BAD_REQUEST,
-            e => {
-                error!("{:?}", e);
-                
-                StatusCode::INTERNAL_SERVER_ERROR
-            },
-        })?;
+        .or_internal_server_error()?;
 
     Ok(Json(
         SignUpResponse {
-            id,
+            id: create_user_response.id,
         }
     ))
 }
@@ -74,5 +80,5 @@ pub async fn verify_token(
         user_id: claims_user.id
     };
 
-    Ok(JsonOrProtobuf::new(response, &content_type))
+    Ok(JsonOrProtobuf::new(response, &content_type).unwrap())
 }

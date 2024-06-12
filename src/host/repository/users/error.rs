@@ -4,7 +4,6 @@ use sqlx::Error as SqlxError;
 
 #[derive(Debug)]
 pub enum SignUpError {
-    UsernameTaken,
     Sqlx(SqlxError),
     Pool(PoolError<SqlxError>),
 }
@@ -14,7 +13,6 @@ impl Error for SignUpError { }
 impl Display for SignUpError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            SignUpError::UsernameTaken => write!(f, "Username taken"),
             SignUpError::Sqlx(e) => write!(f, "Error running query: {}", e),
             SignUpError::Pool(e) => write!(f, "Error obtaining connection from pool: {}", e),
         }

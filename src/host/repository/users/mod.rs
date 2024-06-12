@@ -34,7 +34,7 @@ impl From<User> for ClaimsUser {
 }
 
 pub trait UserRepository {
-    async fn create_user(&self, username: &str, password: &str) -> Result<i32, SignUpError>;
+    async fn set_password(&self, user_id: i32, password: &str) -> Result<(), SignUpError>;
 
     async fn get_by_username(&self, username: &str) -> Result<Option<User>, GetUserError>;
 }
@@ -44,9 +44,9 @@ pub enum UserRepositoryOption {
 }
 
 impl UserRepository for UserRepositoryOption {
-    async fn create_user(&self, username: &str, password_hash: &str) -> Result<i32, SignUpError> {
+    async fn set_password(&self, user_id: i32, password_hash: &str) -> Result<(), SignUpError> {
         match self {
-            Self::Postgres(pg) => pg.create_user(username, password_hash).await
+            Self::Postgres(pg) => pg.set_password(user_id, password_hash).await
         }
     }
     

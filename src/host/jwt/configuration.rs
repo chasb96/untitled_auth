@@ -1,7 +1,6 @@
 use std::{env, sync::OnceLock};
+use log_unwrap::LogUnwrap;
 use serde::Deserialize;
-
-use crate::host::util::log_unwrap::LogUnwrap;
 
 static CONFIGURATION: OnceLock<Configuration> = OnceLock::new();
 
