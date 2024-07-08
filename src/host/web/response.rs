@@ -13,6 +13,6 @@ pub struct LoginResponse {
 
 #[derive(Serialize, Message)] 
 pub struct AuthenticateResponse {
-    #[prost(int32, tag = "1")]
-    pub user_id: i32,
+    #[prost(string, tag = "1")]
+    pub user_id: String,
 }

@@ -33,7 +33,7 @@ pub async fn sign_up(
         .or_internal_server_error()?;
 
     user_repository
-        .set_password(create_user_response.id, &password_hash)
+        .set_password(&create_user_response.id, &password_hash)
         .await
         .or_internal_server_error()?;
 
@@ -71,7 +71,7 @@ pub async fn verify_token(
 ) -> Result<JsonOrProtobuf<AuthenticateResponse>, StatusCode> {
     let (body, content_type) = request.decompose();
 
-    let claims_user: ClaimsUser = match verify_jwt(body.token) {
+    let claims_user = match verify_jwt::<ClaimsUser>(body.token.clone()) {
         Ok(claims_user) => claims_user,
         Err(_) => return Err(StatusCode::UNAUTHORIZED),
     };

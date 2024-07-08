@@ -7,6 +7,7 @@ static CONFIGURATION: OnceLock<Configuration> = OnceLock::new();
 #[derive(Deserialize)]
 pub struct Configuration {
     pub database_url: String,
+    pub database_name: Option<String>,
 }
 
 impl Configuration {
@@ -14,9 +15,11 @@ impl Configuration {
         let config = CONFIGURATION
             .get_or_init(|| {
                 let database_url = env::var("USERS_DATABASE_URL").log_unwrap();
+                let database_name = env::var("USERS_DATABASE_NAME").ok();
 
                 Configuration {
                     database_url,
+                    database_name,
                 }
             });
 

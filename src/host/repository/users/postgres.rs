@@ -1,11 +1,10 @@
+use crate::host::repository::error::QueryError;
 use crate::host::repository::postgres::PostgresDatabase;
-use super::error::GetUserError;
-use super::error::SignUpError;
 use super::User;
 use super::UserRepository;
 
 impl UserRepository for PostgresDatabase {
-    async fn set_password(&self, user_id: i32, password_hash: &str) -> Result<(), SignUpError> {
+    async fn set_password(&self, user_id: &str, password_hash: &str) -> Result<(), QueryError> {
         const UPDATE_QUERY: &'static str = r#"
             UPDATE users 
             SET password_hash = $2
@@ -22,10 +21,10 @@ impl UserRepository for PostgresDatabase {
             .execute(conn.as_mut())
             .await
             .map(|_| ())
-            .map_err(SignUpError::from)
+            .map_err(QueryError::from)
     }
     
-    async fn get_by_username(&self, username: &str) -> Result<Option<User>, GetUserError> {
+    async fn get_by_username(&self, username: &str) -> Result<Option<User>, QueryError> {
         const GET_BY_USERNAME_QUERY: &'static str = r#"
             SELECT
                 id,

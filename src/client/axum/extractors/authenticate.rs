@@ -4,7 +4,7 @@ use axum::{async_trait, extract::FromRequestParts, http::{request::Parts, Status
 use crate::client::{self, AuthClient, VerifyTokenRequest, AUTH_CLIENT};
 
 pub struct ClaimsUser {
-    pub id: i32,
+    pub id: String,
 }
 
 pub struct Authenticate<T>(pub T);

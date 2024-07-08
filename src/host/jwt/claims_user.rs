@@ -2,8 +2,9 @@ use std::{error::Error, fmt::Display};
 use jwt::Claims;
 use serde_json::Value;
 
+#[derive(Clone)]
 pub struct ClaimsUser {
-    pub id: i32,
+    pub id: String,
     pub username: String,
 }
 
@@ -34,14 +35,16 @@ impl TryFrom<Claims> for ClaimsUser {
         for (key, value) in claims.private {
             match key.as_str() {
                 "user_id" => {
-                    if !value.is_number() {
+                    if !value.is_string() {
                         return Err(UserClaimError::InvalidFormat("user_id".to_string()))
                     }
 
                     user_id = Some(
                         value
-                            .as_i64()
-                            .unwrap() as i32
+                            .as_str()
+                            .unwrap()
+                            .to_string()
+                            .clone()
                     );
                 },
                 "username" => {
@@ -54,6 +57,7 @@ impl TryFrom<Claims> for ClaimsUser {
                             .as_str()
                             .unwrap()
                             .to_string()
+                            .clone()
                     );
                 },
                 _ => {},
@@ -78,7 +82,7 @@ impl Into<Claims> for ClaimsUser {
 
         claims.private.insert(
             "user_id".to_string(), 
-            Value::Number((self.id as i64).into())
+            Value::String(self.id)
         );
 
         claims.private.insert(
