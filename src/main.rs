@@ -1,4 +1,4 @@
-use auth::{self, host::router};
+use auth::{self, router};
 
 use std::{env, error::Error};
 use axum::serve;

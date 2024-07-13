@@ -3,61 +3,31 @@ name = "auth"
 version = "0.1.0"
 edition = "2021"
 
-[features]
-default = ["host"]
-host = [
-    "dep:tokio", 
-    "dep:tower", 
-    "dep:tower-layer",
-    "dep:axum-extra", 
-    "dep:bytes", 
-    "dep:log", 
-    "dep:env_logger", 
-    "dep:futures", 
-    "dep:serde", 
-    "dep:serde_json",
-    "dep:sqlx",
-    "dep:deadpool",
-    "dep:scrypt",
-    "dep:sha2",
-    "dep:hmac",
-    "dep:jwt",
-    "dep:rand",
-    "dep:users",
-    "dep:or_status_code",
-    "dep:log_unwrap",
-    "dep:log_layer",
-    "dep:json_or_protobuf",
-    "dep:redis",
-    "dep:mongodb"
-]
-client = ["dep:reqwest"]
-
 [dependencies]
-tokio = { version = "1.36.0", features = ["full"], optional = true }
-tower = { version = "0.4.13", optional = true }
-tower-layer = { version = "0.3.2", optional = true }
+tokio = { version = "1.36.0", features = ["full"] }
+tower = "0.4.13"
+tower-layer = "0.3.2"
 axum = { version = "0.7.4", features = ["multipart"] }
-axum-extra = { version = "0.9.3", features = ["protobuf"], optional = true }
-bytes = { version = "1.6.0", optional = true }
-log = { version = "0.4.20", optional = true }
-env_logger = { version = "0.11.3", optional = true }
-futures = { version = "0.3.30", optional = true }
-serde = { version = "1.0.197", features = ["derive"], optional = true }
-serde_json = { version = "1.0.114", optional = true }
-prost = { version = "0.12.4" }
-sqlx = { version = "0.7.3", features = [ "runtime-tokio", "tls-native-tls", "postgres" ], optional = true }
-deadpool = { version = "0.12.0", features = ["managed"], optional = true }
-scrypt = { version = "0.11.0", optional = true }
-sha2 = { version = "0.10.8", optional = true }
-hmac = { version = "0.12.1", optional = true }
-jwt = { version = "0.16.0", optional = true }
-rand = { version = "0.8.5", optional = true }
-reqwest = { version = "0.12.4", optional = true }
-users = { git = "https://github.com/chasb96/untitled_users", default-features = false, features = ["client"], optional = true }
-or_status_code = { git = "https://github.com/chasb96/or_status_code", optional = true }
-log_unwrap = { git = "https://github.com/chasb96/log_unwrap", optional = true }
-log_layer = { git = "https://github.com/chasb96/log_layer", optional = true }
-json_or_protobuf = { git = "https://github.com/chasb96/json_or_protobuf", optional = true }
-redis = { version = "0.25.4", features = ["async-std-comp", "aio", "ahash", "r2d2"], optional = true }
-mongodb = { version = "3.0.0", optional = true }
+axum-extra = { version = "0.9.3", features = ["protobuf"] }
+bytes = "1.6.0"
+log = "0.4.20"
+env_logger = "0.11.3"
+futures = "0.3.30"
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
+prost = "0.12.4"
+sqlx = { version = "0.7.3", features = [ "runtime-tokio", "tls-native-tls", "postgres" ] }
+deadpool = { version = "0.12.0", features = ["managed"] }
+scrypt = "0.11.0"
+sha2 = "0.10.8"
+hmac = "0.12.1"
+jwt = "0.16.0"
+rand = "0.8.5"
+reqwest = "0.12.4"
+users_client = { git = "https://github.com/chasb96/untitled_users_client", default-features = false }
+or_status_code = { git = "https://github.com/chasb96/or_status_code" }
+log_unwrap = { git = "https://github.com/chasb96/log_unwrap" }
+log_layer = { git = "https://github.com/chasb96/log_layer" }
+json_or_protobuf = { git = "https://github.com/chasb96/json_or_protobuf" }
+redis = { version = "0.25.4", features = ["async-std-comp", "aio", "ahash", "r2d2"] }
+mongodb = "3.0.0"

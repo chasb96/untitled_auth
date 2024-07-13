@@ -1,13 +1,14 @@
 use axum::{http::StatusCode, Json};
 use json_or_protobuf::JsonOrProtobuf;
 use or_status_code::{OrInternalServerError, OrStatusCode};
-use users::client::axum::extractors::UsersClient;
-use users::client::{self, CreateUserRequest};
+use users_client::axum::extractors::UsersClient;
+use users_client::CreateUserRequest;
+use users_client::Error as UserClientError;
 
-use crate::host::axum::extractors::user_repository::UserRepositoryExtractor;
-use crate::host::hash::scrypt::{generate_password_hash, verify_password};
-use crate::host::repository::users::UserRepository;
-use crate::host::jwt::{generate_jwt, verify_jwt, ClaimsUser};
+use crate::axum::extractors::user_repository::UserRepositoryExtractor;
+use crate::hash::scrypt::{generate_password_hash, verify_password};
+use crate::repository::users::UserRepository;
+use crate::jwt::{generate_jwt, verify_jwt, ClaimsUser};
 
 use super::request::{AuthenticateRequest, LoginRequest, SignUpRequest};
 use super::response::{AuthenticateResponse, LoginResponse, SignUpResponse};
@@ -25,7 +26,7 @@ pub async fn sign_up(
 
     let create_user_response = match create_user_response {
         Ok(create_user_response) => create_user_response,
-        Err(client::Error::Status(status_code)) => return Err(status_code),
+        Err(UserClientError::Status(status_code)) => return Err(status_code),
         Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR),
     };
 

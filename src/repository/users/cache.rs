@@ -2,7 +2,7 @@ use bytes::Bytes;
 use prost::Message;
 use redis::AsyncCommands;
 
-use crate::host::repository::{error::QueryError, redis::RedisCache};
+use crate::repository::{error::QueryError, redis::RedisCache};
 
 use super::{User, UserRepository};
 

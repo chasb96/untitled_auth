@@ -1,5 +1,5 @@
-use crate::host::repository::error::QueryError;
-use crate::host::repository::postgres::PostgresDatabase;
+use crate::repository::error::QueryError;
+use crate::repository::postgres::PostgresDatabase;
 use super::User;
 use super::UserRepository;
 

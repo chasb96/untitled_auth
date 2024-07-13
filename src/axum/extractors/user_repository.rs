@@ -1,6 +1,6 @@
 use std::ops::Deref;
 use axum::{async_trait, extract::FromRequestParts, http::{request::Parts, StatusCode}};
-use crate::host::repository::users::UserRepositoryOption;
+use crate::repository::users::UserRepositoryOption;
 
 pub struct UserRepositoryExtractor(UserRepositoryOption);
 

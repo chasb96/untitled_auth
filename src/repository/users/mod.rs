@@ -7,7 +7,7 @@ use prost::Message;
 use serde::Deserialize;
 use sqlx::Row;
 use sqlx::postgres::PgRow;
-use crate::host::jwt::ClaimsUser;
+use crate::jwt::ClaimsUser;
 
 use super::{error::QueryError, mongo::MongoDatabase, postgres::PostgresDatabase};
 

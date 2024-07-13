@@ -3,7 +3,7 @@ use axum_extra::protobuf::Protobuf;
 use prost::Message;
 use serde::Serialize;
 
-use crate::host::axum::JsonOrProtobuf;
+use crate::axum::JsonOrProtobuf;
 
 impl<T> IntoResponse for JsonOrProtobuf<T> 
 where

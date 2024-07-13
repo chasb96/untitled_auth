@@ -1,6 +1,6 @@
 use mongodb::bson::doc;
 
-use crate::host::repository::{error::QueryError, mongo::MongoDatabase};
+use crate::repository::{error::QueryError, mongo::MongoDatabase};
 
 use super::{User, UserRepository};
 

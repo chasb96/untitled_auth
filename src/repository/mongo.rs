@@ -4,7 +4,7 @@ use deadpool::managed::{BuildError, Pool};
 use futures::executor::block_on;
 use log_unwrap::LogUnwrap;
 
-use crate::host::configuration::Configuration;
+use crate::configuration::Configuration;
 
 use super::deadpool::MongoConnectionManager;
 
