@@ -1,5 +1,5 @@
-use axum::{http::StatusCode, Json};
-use json_or_protobuf::JsonOrProtobuf;
+use axum::http::StatusCode;
+use axum_extra::protobuf::Protobuf;
 use or_status_code::{OrInternalServerError, OrStatusCode};
 use users_client::axum::extractors::UsersClient;
 use users_client::CreateUserRequest;
@@ -16,8 +16,8 @@ use super::response::{AuthenticateResponse, LoginResponse, SignUpResponse};
 pub async fn sign_up(
     users_client: UsersClient,
     user_repository: UserRepositoryExtractor,
-    Json(request): Json<SignUpRequest>
-) -> Result<Json<SignUpResponse>, StatusCode> {
+    Protobuf(request): Protobuf<SignUpRequest>
+) -> Result<Protobuf<SignUpResponse>, StatusCode> {
     let create_user_response = users_client
         .create_user(CreateUserRequest { 
             username: request.username 
@@ -38,17 +38,17 @@ pub async fn sign_up(
         .await
         .or_internal_server_error()?;
 
-    Ok(Json(
-        SignUpResponse {
-            id: create_user_response.id,
-        }
-    ))
+    let response = SignUpResponse {
+        id: create_user_response.id,
+    };
+
+    Ok(Protobuf(response))
 }
 
 pub async fn login(
     user_repository: UserRepositoryExtractor,
-    Json(request): Json<LoginRequest>
-) -> Result<Json<LoginResponse>, StatusCode> {
+    Protobuf(request): Protobuf<LoginRequest>
+) -> Result<Protobuf<LoginResponse>, StatusCode> {
     let user = user_repository
         .get_by_username(&request.username)
         .await
@@ -59,20 +59,18 @@ pub async fn login(
         return Err(StatusCode::UNAUTHORIZED)
     }
 
-    Ok(Json(
-        LoginResponse {
-            token: generate_jwt(ClaimsUser::from(user))
-                .or_internal_server_error()?,
-        }
-    ))
+    let response = LoginResponse {
+        token: generate_jwt(ClaimsUser::from(user))
+            .or_internal_server_error()?,
+    };
+
+    Ok(Protobuf(response))
 }
 
 pub async fn verify_token(
-    request: JsonOrProtobuf<AuthenticateRequest>
-) -> Result<JsonOrProtobuf<AuthenticateResponse>, StatusCode> {
-    let (body, content_type) = request.decompose();
-
-    let claims_user = match verify_jwt::<ClaimsUser>(body.token.clone()) {
+    Protobuf(request): Protobuf<AuthenticateRequest>
+) -> Result<Protobuf<AuthenticateResponse>, StatusCode> {
+    let claims_user = match verify_jwt::<ClaimsUser>(request.token.clone()) {
         Ok(claims_user) => claims_user,
         Err(_) => return Err(StatusCode::UNAUTHORIZED),
     };
@@ -81,5 +79,5 @@ pub async fn verify_token(
         user_id: claims_user.id
     };
 
-    Ok(JsonOrProtobuf::new(response, &content_type).unwrap())
+    Ok(Protobuf(response))
 }

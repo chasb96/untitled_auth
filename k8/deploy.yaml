@@ -27,8 +27,10 @@ spec:
         - name: USERS_DATABASE_URL
           valueFrom: 
             secretKeyRef:
-              name: users-database-connection-string
-              key: database_url
+              name: users-mongo-credentials
+              key: connection-string
+        - name: USERS_DATABASE_NAME
+          value: users
         - name: JWT_HMAC_KEY
           valueFrom: 
             secretKeyRef:

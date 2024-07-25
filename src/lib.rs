@@ -1,5 +1,5 @@
-use axum::layers::LogLayer;
 use ::axum::{routing::get, Router};
+use log_layer::LogLayer;
 use routes::AuthRouter;
 
 mod jwt;
